@@ -52,6 +52,7 @@ header {
   color: #004080;
 }
 
+
 /* Players Section */
 .players {
   display: flex;
@@ -90,6 +91,15 @@ header {
   margin-bottom: 20px;
 }
 
+.state {
+    background-color: #fffbe6;
+    border: 1px solid #e0c97f;
+    border-radius: 6px;
+    padding: 15px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
 .message section {
   font-weight: 500;
   margin-bottom: 8px;
@@ -97,14 +107,14 @@ header {
 }
 
 /* Cards Section */
-.cards {
+.card {
   display: flex;
   justify-content: center;
   gap: 15px;
   margin-bottom: 25px;
 }
 
-.cards section {
+.card section {
   background-color: #ffffff;
   border: 2px dashed #999;
   padding: 25px;
