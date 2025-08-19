@@ -6,7 +6,7 @@ const players = {
 
 const state = {
     turnsRemaining: "",
-    playerTurn: "",
+    playerTurn: "Player 1",
     currentPot: "",
     currentBet: "",
 }
@@ -70,17 +70,15 @@ function init () {
 }
 
 function render() {
-  // Player Money
+
   money1El.textContent = `$${players.player1.money}`;
   money2El.textContent = `$${players.player2.money}`;
 
-  // Game State
   remainingTurnsEl.textContent = `Turns Remaining: ${state.turnsRemaining}`;
   currentTurnEl.textContent = `Current Turn: ${state.playerTurn}`;
   potEl.textContent = `Pot: $${state.currentPot}`;
   betEl.textContent = `Current Bet: $${state.currentBet}`;
 
-  // Game Message
   gameMessageEl.textContent = "Welcome to In-Between! Click 'Deal Cards' to begin.";
 
 }
@@ -89,23 +87,108 @@ function shuffleCards(cardDeck) {
  shuffledDeck = cardDeck.sort(() => Math.random() - 0.5);
 }
 
+function switchPlayer () {
+  if (state.playerTurn === "Player 1") {state.playerTurn = "Player 2"}
+
+  else {state.playerTurn="Player 1"}
+}
+
+function getCurrentPlayer() {
+  if (state.playerTurn === "Player 1") {
+    return players.player1
+  }
+
+  else {return players.player2}
+}
 
 function dealOuterCards () {
+
   if (shuffledDeck.length < 2) {
     shuffledDeck = cardDeck
     shuffleCards (cardDeck)
   }
 
-  else if (gameFlow.betPlaced === false) {
-    gameMessageEl.textContent = "Need to place a bet before middle card can be dealt!"
-  }
-
   else {
     const card1 = shuffledDeck.shift();
-    card1El.className = `card ${card1}`; // Apply correct class
-    gameFlow.gameStarted = true;
-
+    const card3 = shuffledDeck.shift();
+    card1El.className = `card ${card1}`;
+    card3El.className = `card ${card3}`; 
+    gameMessageEl.textContent = "Place bet or pass on this hand!"
+    players.player1.money -= 10
+    players.player2.money -= 10
+    state.currentPot +=20
+    render()
   }
+}
+
+function dealMiddleCard () {
+  if (shuffledDeck.length < 1) {
+    shuffledDeck = cardDeck
+    shuffleCards (cardDeck)
+  }
+
+  const card2 = shuffledDeck.shift();
+  card2El.className = `card ${card2}`;
+}
+
+function passBet () {
+  if (shuffledDeck.length < 2) {
+    shuffledDeck = cardDeck
+    shuffleCards (cardDeck)
+  }
+
+  else {const card1 = shuffledDeck.shift();
+    const card3 = shuffledDeck.shift();
+    card1El.className = `card ${card1}`;
+    card3El.className = `card ${card3}`;
+
+    const previousPlayer = state.playerTurn
+    state.turnsRemaining -=1
+    switchPlayer ()
+    gameMessageEl.textContent = `${previousPlayer} has passed. It's now ${state.playerTurn}'s turn.`
+    
+    render()
+  }
+}
+
+
+function increaseBet () {
+  const currentPlayer = getCurrentPlayer ()
+  const betAmount = 10
+
+  if (betAmount > state.currentPot) {
+    gameMessageEl.textContent = "$Can not bet more than the pot! You've reached the max bet."
+  }
+
+  else {currentPlayer.money -=10
+    state.currentBet +=10
+    state.currentPot +=10
+    render()
+  }
+}
+
+function decreaseBet () {
+  const currentPlayer = getCurrentPlayer ()
+  const betAmount = 10
+
+  const newBet = state.currentBet - betAmount
+  const newPot = state.currentBet -betAmount
+
+  if (newBet < 0 || newPot < 0) {
+    gameMessageEl.textContent = "Cannot bet less than zero!"
+  }
+
+  else {currentPlayer.money +=10
+    state.currentBet -=10
+    state.currentPot -=10
+    gameMessageEl.textContent = `Bet has been reduced by $10. Pot is now ${state.currentPot}`
+    render()
+  }
+}
+
+function submitBet () {
+  dealMiddleCard()
+    
 }
 
 /*----------- Event Listeners ----------*/
@@ -121,20 +204,27 @@ buttons.forEach((button) => {
 init()
 
 //Shuffle Deck
-  console.log(shuffledDeck)
 
 //User clicks deal cards
     //don't run if game hasn't started
 
 // Deal outer cards
-
 dealOuterCards ()
+increaseBet()
+increaseBet()
+decreaseBet()
+decreaseBet()
+decreaseBet()
+
 
 
 // Player turn
   //pass
+  
   //bet
+  
     //deal middle card
+  
   //render result
 
 // Switch players
