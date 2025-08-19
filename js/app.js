@@ -11,12 +11,17 @@ const state = {
     currentBet: "",
 }
 
-const cardDeck = ["dA","dQ","dK","dJ","d10","d09","d08","d07","d06","d05","d04","d03","d02","hA","hQ","hK","hJ","h10","h09","h08","h07","h06","h05","h04","h03","h02","cA","cQ","cK","cJ","c10","c09","c08","c07","c06","c05","c04","c03","c02","sA","sQ","sK","sJ","s10","s09","s08","s07","s06","s05","s04","s03","s02"]
+const gameFlow = {
+  gameStarted: false,
+  betPlaced: false,
+}
 
+const cardDeck = ["dA","dQ","dK","dJ","d10","d09","d08","d07","d06","d05","d04","d03","d02","hA","hQ","hK","hJ","h10","h09","h08","h07","h06","h05","h04","h03","h02","cA","cQ","cK","cJ","c10","c09","c08","c07","c06","c05","c04","c03","c02","sA","sQ","sK","sJ","s10","s09","s08","s07","s06","s05","s04","s03","s02"]
 
 /*---------- Variables (state) ---------*/
 
 let userClick = ""
+let shuffledDeck = []
 
 /*----- Cached Element References  -----*/
 
@@ -41,8 +46,6 @@ const betEl = document.getElementById("currentBet");
 // Buttons
 const buttons = document.querySelectorAll(".buttons button");
 
-
-
 /*-------------- Functions -------------*/
 
 function init () {
@@ -50,12 +53,18 @@ function init () {
     players.player1.money = 100
     players.player2.money = 100
 
-   // initialize game state 
+   // initialize game stats
     state.turnsRemaining = 20
     state.playerTurn = "Player 1"
     state.currentPot = 0
     state.currentBet = 0
-    
+
+    //game flow
+    gameFlow.betPlaced = true
+
+    //shuffle deck
+    shuffleCards (cardDeck)
+
    //render 
     render()
 }
@@ -76,6 +85,29 @@ function render() {
 
 }
 
+function shuffleCards(cardDeck) {
+ shuffledDeck = cardDeck.sort(() => Math.random() - 0.5);
+}
+
+
+function dealOuterCards () {
+  if (shuffledDeck.length < 2) {
+    shuffledDeck = cardDeck
+    shuffleCards (cardDeck)
+  }
+
+  else if (gameFlow.betPlaced === false) {
+    gameMessageEl.textContent = "Need to place a bet before middle card can be dealt!"
+  }
+
+  else {
+    const card1 = shuffledDeck.shift();
+    card1El.className = `card ${card1}`; // Apply correct class
+    gameFlow.gameStarted = true;
+
+  }
+}
+
 /*----------- Event Listeners ----------*/
 
 buttons.forEach((button) => {
@@ -84,5 +116,25 @@ buttons.forEach((button) => {
     })
 })
 
-//1. Initialize game
+
+//Initialize game
 init()
+
+//Shuffle Deck
+  console.log(shuffledDeck)
+
+//User clicks deal cards
+    //don't run if game hasn't started
+
+// Deal outer cards
+
+dealOuterCards ()
+
+
+// Player turn
+  //pass
+  //bet
+    //deal middle card
+  //render result
+
+// Switch players
