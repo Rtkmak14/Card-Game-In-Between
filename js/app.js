@@ -4,6 +4,12 @@ const players = {
   player2: { money: "" },
 };
 
+const cards = {
+  left: null,
+  middle: null,
+  right: null
+}
+
 const state = {
     turnsRemaining: "",
     playerTurn: "Player 1",
@@ -12,11 +18,19 @@ const state = {
 }
 
 const gameFlow = {
-  gameStarted: false,
   betPlaced: false,
+  newRound: true,
+  roundResult: "win"
 }
 
 const cardDeck = ["dA","dQ","dK","dJ","d10","d09","d08","d07","d06","d05","d04","d03","d02","hA","hQ","hK","hJ","h10","h09","h08","h07","h06","h05","h04","h03","h02","cA","cQ","cK","cJ","c10","c09","c08","c07","c06","c05","c04","c03","c02","sA","sQ","sK","sJ","s10","s09","s08","s07","s06","s05","s04","s03","s02"]
+
+const rankCards = {
+  "A": 1,
+  "02": 2, "03": 3, "04": 4, "05": 5, "06": 6, "07": 7,
+  "08": 8, "09": 9, "10": 10,
+  "J": 11, "Q": 12, "K": 13
+}
 
 /*---------- Variables (state) ---------*/
 
@@ -101,24 +115,43 @@ function getCurrentPlayer() {
   else {return players.player2}
 }
 
-function dealOuterCards () {
-
-  if (shuffledDeck.length < 2) {
-    shuffledDeck = cardDeck
-    shuffleCards (cardDeck)
-  }
-
-  else {
-    const card1 = shuffledDeck.shift();
-    const card3 = shuffledDeck.shift();
-    card1El.className = `card ${card1}`;
-    card3El.className = `card ${card3}`; 
-    gameMessageEl.textContent = "Place bet or pass on this hand!"
+function dealOuterCards() {
+   
+  if (gameFlow.roundResult === "win") {
+    state.currentPot = 0
     players.player1.money -= 10
     players.player2.money -= 10
-    state.currentPot +=20
-    render()
+    state.currentPot += 20
+    gameMessageEl.textContent = "New round! Ante paid. Place bet or pass."
+  } 
+  
+  else if (gameFlow.roundResult === "loss") {
+    gameMessageEl.textContent = "Next turn! Pot rolls over. Place bet or pass."
   }
+
+  switchPlayer()
+  state.turnsRemaining -= 1
+
+  if (shuffledDeck.length < 2) {
+    shuffledDeck = [...cardDeck]
+    shuffleCards(shuffledDeck)
+  }
+
+  const card1 = shuffledDeck.shift()
+  const card3 = shuffledDeck.shift()
+  cards.left = card1;
+  cards.right = card3;
+  card1El.className = `card ${card1}`
+  card3El.className = `card ${card3}`
+
+  cards.middle = null
+  card2El.className = "card back"
+  state.currentBet = 0
+
+  gameFlow.roundResult = ""
+  gameFlow.newRound = false
+
+  render();
 }
 
 function dealMiddleCard () {
@@ -128,6 +161,7 @@ function dealMiddleCard () {
   }
 
   const card2 = shuffledDeck.shift();
+  cards.middle = card2
   card2El.className = `card ${card2}`;
 }
 
@@ -151,18 +185,20 @@ function passBet () {
   }
 }
 
-
 function increaseBet () {
   const currentPlayer = getCurrentPlayer ()
   const betAmount = 10
 
-  if (betAmount > state.currentPot) {
-    gameMessageEl.textContent = "$Can not bet more than the pot! You've reached the max bet."
+  const wageredAmount = state.currentBet + betAmount
+
+  if (wageredAmount > state.currentPot) {
+    gameMessageEl.textContent = "Cannot bet more than the pot! You've reached the max bet."
+    return
   }
 
   else {currentPlayer.money -=10
-    state.currentBet +=10
-    state.currentPot +=10
+    state.currentBet = wageredAmount
+    gameMessageEl.textContent = `Bet increased by $${betAmount}. Current bet is now $${state.currentBet}.`
     render()
   }
 }
@@ -172,23 +208,56 @@ function decreaseBet () {
   const betAmount = 10
 
   const newBet = state.currentBet - betAmount
-  const newPot = state.currentBet -betAmount
 
-  if (newBet < 0 || newPot < 0) {
-    gameMessageEl.textContent = "Cannot bet less than zero!"
+  if (newBet < 0) {
+    gameMessageEl.textContent = "Bet amount cannot bet less than zero!"
   }
 
   else {currentPlayer.money +=10
     state.currentBet -=10
-    state.currentPot -=10
     gameMessageEl.textContent = `Bet has been reduced by $10. Pot is now ${state.currentPot}`
     render()
   }
 }
 
 function submitBet () {
+ if (cards.middle) {
+    gameMessageEl.textContent = "You've already revealed the middle card. Click 'Deal Cards' to continue.";
+    return;
+  }
+
+  if (state.currentBet === 0) {
+    gameMessageEl.textContent = "You must place a bet before submitting.";
+    return;
+  }
+ 
   dealMiddleCard()
-    
+
+ const leftRank = rankCards[cards.left.slice(1)]
+ const rightRank = rankCards[cards.right.slice(1)]
+ const middleRank = rankCards[cards.middle.slice(1)]
+
+ const low = Math.min(leftRank,rightRank)
+ const high = Math.max(leftRank,rightRank)
+
+ const currentPlayer = getCurrentPlayer()
+ const previousPlayer = state.playerTurn
+
+ if (middleRank>low && middleRank<high) {
+    currentPlayer.money += state.currentPot
+    gameMessageEl.textContent= `${previousPlayer} wins the pot! ${cards.middle} is between ${cards.left} and ${cards.right}.`
+    gameFlow.roundResult ="win"
+    gameFlow.newRound=true
+ }
+
+ else {
+  gameMessageEl.textContent = `${previousPlayer} loses the hand. ${cards.middle} is not between ${cards.left} and ${cards.right}.`
+  currentPlayer.money -= state.currentBet
+  gameFlow.roundResult ="loss"
+ }
+
+ render()
+
 }
 
 /*----------- Event Listeners ----------*/
@@ -209,13 +278,13 @@ init()
     //don't run if game hasn't started
 
 // Deal outer cards
-dealOuterCards ()
+dealOuterCards()
 increaseBet()
 increaseBet()
+increaseBet()
 decreaseBet()
 decreaseBet()
 decreaseBet()
-
 
 
 // Player turn
