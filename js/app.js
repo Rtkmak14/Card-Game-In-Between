@@ -121,8 +121,6 @@ function init () {
 
     setButtonStates("initial")
 
-    console.log(shuffledDeck) //for check
-
     render()
 }
 
@@ -157,7 +155,7 @@ function checkTurnsRemaining () {
     }
 
     else if(playerOneMoney>playerTwoMoney ) {
-      gameState.gameMessage = `Player 1 has won the game. Player 2 owes Player 1 $${playerOnePotentialWinnings}!`
+      gameState.gameMessage = `Game over! Player 1 has won the game. Player 2 owes Player 1 $${playerOnePotentialWinnings}!`
     }
 
     else {
@@ -270,6 +268,7 @@ function dealOuterCards() {
     card3El.className = `card ${card3}`
     card2El.className = "card back"
     gameState.turnsRemaining -=1
+    checkTurnsRemaining()
   }
 
 
@@ -290,10 +289,10 @@ function dealOuterCards() {
     card3El.className = `card ${card3}`
     card2El.className = "card back"
     gameState.turnsRemaining -=1
+    checkTurnsRemaining()
   }
   setButtonStates("afterDeal")
   render();
-  console.log(shuffledDeck) //for check
 }
 
 function passBet () {
@@ -315,9 +314,11 @@ function passBet () {
   gameState.turnsRemaining -=1
   
   gameState.gameMessage = `${previousPlayer} has passed. It's now ${gameState.playerTurn}'s turn.`
+   
+  checkTurnsRemaining()
 
   render()
- console.log(shuffledDeck) //for check
+
 }
 
 
@@ -422,7 +423,7 @@ function submitBet () {
   }
 
   setButtonStates("afterSubmit")
-  console.log(shuffledDeck) //for check
+  console.log(gameState.turnsRemaining)
 
   }
 
