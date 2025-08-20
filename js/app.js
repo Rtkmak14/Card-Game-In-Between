@@ -121,6 +121,8 @@ function init () {
 
     setButtonStates("initial")
 
+    console.log(shuffledDeck) //for check
+
     render()
 }
 
@@ -174,19 +176,18 @@ function setButtonStates (phase) {
 }
 
 function shuffleCards(cardDeck) {
- shuffledDeck = cardDeck.sort(() => Math.random() - 0.5)
+ shuffledDeck = [...cardDeck].sort(() => Math.random() - 0.5)
 }
 
 function checkDeckLength1 () {
   if (shuffledDeck.length < 1) {
-    shuffledDeck = [...cardDeck]
-    shuffleCards (cardDeck)
+      shuffleCards([...cardDeck])
   }
 }
+
 function checkDeckLength2 () {
   if  (shuffledDeck.length < 2) {
-        shuffledDeck = [...cardDeck]
-        shuffleCards(shuffledDeck)
+        shuffleCards([...cardDeck])
         }
 }
 
@@ -260,7 +261,7 @@ function dealOuterCards() {
   }
   setButtonStates("afterDeal")
   render();
-
+  console.log(shuffledDeck) //for check
 }
 
 function passBet () {
@@ -284,7 +285,7 @@ function passBet () {
   gameState.gameMessage = `${previousPlayer} has passed. It's now ${gameState.playerTurn}'s turn.`
 
   render()
- 
+ console.log(shuffledDeck) //for check
 }
 
 
@@ -392,7 +393,8 @@ function submitBet () {
   }
 
   setButtonStates("afterSubmit")
-  
+  console.log(shuffledDeck) //for check
+
   }
 
 init()
