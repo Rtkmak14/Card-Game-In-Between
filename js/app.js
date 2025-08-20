@@ -168,9 +168,7 @@ function checkTurnsRemaining () {
     gameState.gameMessage = gameState.gameMessage + " Keep playing until the pot is cleared!"
   }
 
-  else {
-    console.log(gameState.gameOver)
-    console.log("LAST OUTCOME")}
+  else {gameState.gameMessage = gameState.gameMessage}
 
 }
 
