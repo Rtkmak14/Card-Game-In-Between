@@ -97,13 +97,13 @@ function shuffleCards(cardDeck) {
 
 function checkDeckLength1 () {
   if (shuffledDeck.length < 1) {
-    shuffledDeck = cardDeck
+    shuffledDeck = [...cardDeck]
     shuffleCards (cardDeck)
   }
 }
 function checkDeckLength2 () {
   if  (shuffledDeck.length < 2) {
-        shuffledDeck = cardDeck
+        shuffledDeck = [...cardDeck]
         shuffleCards(shuffledDeck)
         }
 }
@@ -315,46 +315,6 @@ submitBet()
 dealOuterCards()
 passBet()
 
-
-// function submitBet () {
-//  if (cards.middle) {
-//     gameMessageEl.textContent = "You've already revealed the middle card. Click 'Deal Cards' to continue.";
-//     return;
-//   }
-
-//   if (state.currentBet === 0) {
-//     gameMessageEl.textContent = "You must place a bet before submitting.";
-//     return;
-//   }
- 
-//   dealMiddleCard()
-
-//  const leftRank = rankCards[cards.left.slice(1)]
-//  const rightRank = rankCards[cards.right.slice(1)]
-//  const middleRank = rankCards[cards.middle.slice(1)]
-
-//  const low = Math.min(leftRank,rightRank)
-//  const high = Math.max(leftRank,rightRank)
-
-//  const currentPlayer = getCurrentPlayer()
-//  const previousPlayer = state.playerTurn
-
-//  if (middleRank>low && middleRank<high) {
-//     currentPlayer.money += state.currentPot
-//     gameMessageEl.textContent= `${previousPlayer} wins the pot! ${cards.middle} is between ${cards.left} and ${cards.right}.`
-//     gameFlow.roundResult ="win"
-//     gameFlow.newRound=true
-//  }
-
-//  else {
-//   gameMessageEl.textContent = `${previousPlayer} loses the hand. ${cards.middle} is not between ${cards.left} and ${cards.right}.`
-//   currentPlayer.money -= state.currentBet
-//   gameFlow.roundResult ="loss"
-//  }
-
-//  render()
-
-// }
 
 
 
