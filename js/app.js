@@ -258,7 +258,7 @@ function dealOuterCards() {
     card3El.className = `card ${card3}`
     card2El.className = "card back"
   }
-
+  setButtonStates("afterDeal")
   render();
 
 }
@@ -391,6 +391,8 @@ function submitBet () {
     render()
   }
 
+  setButtonStates("afterSubmit")
+  
   }
 
 init()
