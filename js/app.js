@@ -80,6 +80,9 @@ function init () {
 
     shuffleCards (cardDeck)
     
+    card1El.className = "card back-blue"
+    card2El.className = "card back-blue"
+    card3El.className = "card back-blue"
 
     render()
 }
@@ -124,8 +127,6 @@ function handleClick (userClick) {
   }
 
 }
-
-
 
 function shuffleCards(cardDeck) {
  shuffledDeck = cardDeck.sort(() => Math.random() - 0.5)
@@ -215,6 +216,10 @@ function dealOuterCards() {
   }
 
   render();
+
+  //for checks
+console.log(cards.left)
+console.log(cards.right)
 }
 
 function passBet () {
@@ -222,7 +227,15 @@ function passBet () {
   checkDeckLength2 ()
 
   const card1 = shuffledDeck.shift()
+  // console.log(card1) //for checks
   const card3 = shuffledDeck.shift()
+  // console.log(card3) //for checks
+  cards.left = card1
+  cards.right =card3
+
+  // console.log(cards.left)//for checks
+  // console.log(cards.right)//for checks
+
   card1El.className = `card ${card1}`
   card3El.className = `card ${card3}`
 
@@ -235,6 +248,7 @@ function passBet () {
   gameState.gameMessage = `${previousPlayer} has passed. It's now ${gameState.playerTurn}'s turn.`
 
   render()
+ 
 }
 
 
@@ -255,6 +269,7 @@ function increaseBet () {
     gameState.gameMessage = `Bet increased by $${betAmount}. Current bet is now $${gameState.currentBet}.`
     render()
   }
+
 }
 
 
@@ -303,9 +318,15 @@ function submitBet () {
   const rightRank = rankCards[cards.right.slice(1)]
   const middleRank = rankCards[cards.middle.slice(1)]
 
-  console.log(leftRank)
-  console.log(middleRank)
-  console.log(rightRank)
+  //for checks
+
+  // console.log(cards.left)
+  // console.log(cards.middle)
+  // console.log(cards.right)
+
+  // console.log(leftRank)
+  // console.log(middleRank)
+  // console.log(rightRank)
   
   const low = Math.min(leftRank,rightRank)
   const high = Math.max(leftRank,rightRank)
