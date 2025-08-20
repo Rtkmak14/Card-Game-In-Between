@@ -396,7 +396,8 @@ function submitBet () {
   const high = Math.max(leftRank,rightRank)
 
   if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot not cleared
-      currentPlayer.money += gameState.currentBet
+      currentPlayer.money += gameState.currentBet //return bet
+      currentPlayer.money += gameState.currentBet //take portion of pot won
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
       switchPlayer()
