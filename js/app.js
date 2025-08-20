@@ -278,7 +278,7 @@ function dealMiddleCard () {
 function submitBet () {
   const previousPlayer = gameState.playerTurn
 
-  getCurrentPlayer()
+  const currentPlayer = getCurrentPlayer()
 
   dealMiddleCard()
   
@@ -296,31 +296,46 @@ function submitBet () {
   }
 
   else if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot not cleared
-      currentPlayer.money += state.currentPot
+      currentPlayer.money += gameState.currentPot
+      currentPlayer.money += gameState.currentBet
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
-      gameState.gameMessage = `${previousPlayer} wins the pot! ${cards.middle} is between ${cards.left} and ${cards.right}.`
-      gameState.roundResult ="win"  
+      gameState.gameMessage = `Middle card is in between! ${previousPlayer} wins the bet!.`
+      gameState.roundResult ="not cleared"  
       switchPlayer()
       render()
     }
 
-  else if ((gameState.currentBet===gameState.currentpot) && (middleRank>low && middleRank<high)) {//winning state, pot cleared
-      currentPlayer.money += state.currentPot
+  else if ((gameState.currentBet===gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot cleared
+      currentPlayer.money += gameState.currentPot
+      currentPlayer.money += gameState.currentBet
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
-      gameState.gameMessage= `${previousPlayer} clears the pot! ${cards.middle} is between ${cards.left} and ${cards.right}.`
-      gameState.roundResult ="pot cleared"
+      gameState.gameMessage= `Middle card is in between! ${previousPlayer} clears the pot!`
+      gameState.roundResult ="cleared"
       switchPlayer()
       render()
     }
+
+  else {
+    gameState.currentPot += gameState.currentBet
+    gameState.currentBet = 0
+    gameState.gameMessage= `Middle card is not between! ${previousPlayer} losses bet!`
+    gameState.roundResult ="not cleared"
+    switchPlayer()
+    render()
+  }
+
   }
 
 
 init()
 dealOuterCards()
+submitBet()
 increaseBet()
-// submitBet()
+increaseBet()
+submitBet()
+
 
 
 
