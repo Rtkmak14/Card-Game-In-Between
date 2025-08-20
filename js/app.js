@@ -51,6 +51,14 @@ const betEl = document.getElementById("currentBet")
 
 const buttons = document.querySelectorAll(".buttons button")
 
+const dealBtn = document.getElementById("dealBtn")
+const passBtn = document.getElementById("passBtn")
+const increaseBtn = document.getElementById("increaseBtn")
+const decreaseBtn = document.getElementById("decreaseBtn")
+const submitBtn = document.getElementById("submitBtn")
+const resetBtn = document.getElementById("resetBtn")
+
+
 /*----------- Event Listeners ----------*/
 
 buttons.forEach((button) => {
@@ -73,7 +81,6 @@ function init () {
     gameState.gameMessage = "Welcome to In-Between! Select Deal Cards to begin playing!"
     gameState.roundResult = null
     
-
     cards.left = null
     cards.right =  null
     cards.middle =  null
@@ -217,9 +224,6 @@ function dealOuterCards() {
 
   render();
 
-  //for checks
-console.log(cards.left)
-console.log(cards.right)
 }
 
 function passBet () {
@@ -227,14 +231,9 @@ function passBet () {
   checkDeckLength2 ()
 
   const card1 = shuffledDeck.shift()
-  // console.log(card1) //for checks
   const card3 = shuffledDeck.shift()
-  // console.log(card3) //for checks
   cards.left = card1
   cards.right =card3
-
-  // console.log(cards.left)//for checks
-  // console.log(cards.right)//for checks
 
   card1El.className = `card ${card1}`
   card3El.className = `card ${card3}`
@@ -318,15 +317,6 @@ function submitBet () {
   const rightRank = rankCards[cards.right.slice(1)]
   const middleRank = rankCards[cards.middle.slice(1)]
 
-  //for checks
-
-  // console.log(cards.left)
-  // console.log(cards.middle)
-  // console.log(cards.right)
-
-  // console.log(leftRank)
-  // console.log(middleRank)
-  // console.log(rightRank)
   
   const low = Math.min(leftRank,rightRank)
   const high = Math.max(leftRank,rightRank)
@@ -340,7 +330,6 @@ function submitBet () {
       gameState.roundResult = "not cleared"
       gameState.turnsRemaining -=1  
       render()
-      console.log("hand was won, pot not cleared")
     }
 
   else if ((gameState.currentBet===gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot cleared
@@ -353,7 +342,6 @@ function submitBet () {
       gameState.roundResult ="cleared"
       gameState.turnsRemaining -=1
       render()
-      console.log("hand was won, pot cleared")
     }
 
   else {
@@ -364,7 +352,6 @@ function submitBet () {
     gameState.gameMessage= `Middle card is not between! ${previousPlayer} losses bet! It's now ${gameState.playerTurn}'s turn!`
     gameState.turnsRemaining -=1
     render()
-    console.log("HAND WAS LOST")
   }
 
   }
