@@ -111,12 +111,13 @@ function init () {
     players.player1.money = 100
     players.player2.money = 100
 
-    gameState.turnsRemaining = 20
+    gameState.turnsRemaining = 3
     gameState.playerTurn = "Player 1"
     gameState.currentPot = 0
     gameState.currentBet = 0
     gameState.gameMessage = "Welcome to In-Between! Select Deal Cards to begin playing!"
     gameState.roundResult = null
+    gameState.gameOver = false
     
     cards.left = null
     cards.right =  null
@@ -148,29 +149,29 @@ function render() {
 }
 
 function checkTurnsRemaining () {
-  // const playerOneMoney = players.player1.money
-  // const playerTwoMoney = players.player2.money
-  // const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
-  // const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
-  
- if (gameState.gameOver === false && gameState.turnsRemaining === 1) {
-  console.log(gameState.gameMessage)
-  gameState.gameMessage = gameState.gameMessage +" It's also the Last turn!"
-  gameState.gameOver = true
-  gameState.turnsRemaining = 0
-  setButtonStates("afterDeal")
-  return
- }
+  const playerOneMoney = players.player1.money
+  const playerTwoMoney = players.player2.money
+  const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
+  const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
 
- else if (gameState.gameOver === true && gameState.currentPot<=0) {
-  gameState.gameMessage = gameState.gameMessage + " Maximum turns also reached! Play until pot is cleared and then that's it!"
-  gameState.turnsRemaining = 0
- }
+  if (gameState.turnsRemaining===1) {
+    gameState.gameMessage = gameState.gameMessage + " It's also the last turn!"
+    gameState.gameOver = true
+  }
 
- else if (gameState.gameOver === true && gameState.currentPot === 0) {
-  gameState.gameOver = "Game over!"
- }
-  render()
+  else if (gameState.gameOver === true && gameState.currentPot === 0) {
+    gameState.gameMessage = gameState.gameMessage + " Game is also over!"
+    setButtonStates("gameOver")
+  }
+
+  else if(gameState.gameOver === true && gameState.currentPot != 0) {
+    gameState.gameMessage = gameState.gameMessage + " Keep playing until the pot is cleared!"
+  }
+
+  else {
+    console.log(gameState.gameOver)
+    console.log("LAST OUTCOME")}
+
 }
 
 function handleClick (userClick) {
@@ -316,9 +317,10 @@ function passBet () {
   
   gameState.gameMessage = `${previousPlayer} has passed. It's now ${gameState.playerTurn}'s turn.`
    
-  // checkTurnsRemaining()
   
   gameState.turnsRemaining -=1
+
+  checkTurnsRemaining()
 
   render()
 
@@ -427,7 +429,7 @@ function submitBet () {
   }
   
   setButtonStates("afterSubmit")
-  // checkTurnsRemaining()
+  checkTurnsRemaining()
   render()
   }
 
