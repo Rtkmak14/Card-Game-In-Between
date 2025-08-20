@@ -16,7 +16,8 @@ const gameState = {
     currentPot: 0,
     currentBet: 0,
     gameMessage: null,
-    roundResult: null
+    roundResult: null,
+    gameOver: false
 }
 
 const cardDeck = ["dA","dQ","dK","dJ","d10","d09","d08","d07","d06","d05","d04","d03","d02","hA","hQ","hK","hJ","h10","h09","h08","h07","h06","h05","h04","h03","h02","cA","cQ","cK","cJ","c10","c09","c08","c07","c06","c05","c04","c03","c02","sA","sQ","sK","sJ","s10","s09","s08","s07","s06","s05","s04","s03","s02"]
@@ -47,6 +48,14 @@ const buttonStates = {
   },
   afterSubmit: {
     dealBtn: true,
+    passBtn: false,
+    increaseBtn: false,
+    decreaseBtn: false,
+    submitBtn: false,
+    resetBtn: true
+  },
+   gameOver: {
+    dealBtn: false,
     passBtn: false,
     increaseBtn: false,
     decreaseBtn: false,
@@ -102,7 +111,7 @@ function init () {
     players.player1.money = 100
     players.player2.money = 100
 
-    gameState.turnsRemaining = 20
+    gameState.turnsRemaining = 3
     gameState.playerTurn = "Player 1"
     gameState.currentPot = 0
     gameState.currentBet = 0
@@ -139,30 +148,29 @@ function render() {
 }
 
 function checkTurnsRemaining () {
-  if (gameState.turnsRemaining === 1) {
-    gameState.gameMessage = "Last Turn!"
-  }
+  const playerOneMoney = players.player1.money
+  const playerTwoMoney = players.player2.money
+  const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
+  const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
+  
+ if (gameState.gameOver === false & gameState.turnsRemaining === 1) {
+  gameState.gameMessage = "Last turn!"
+ }
 
-  else if (gameState.turnsRemaining === 0) {
-    const playerOneMoney = players.player1.money
-    const playerTwoMoney = players.player2.money
+ else if (gameState.gameOver === false && gameState.turnsRemaining === 0 & gameState.currentPot === 0) {
+  gameState.gameMessage === "Game over!"
+ }
 
-    const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
-    const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
+ else if (gameState.gameOver === false && gameState.turnsRemaining === 0 & gameState.currentPot > 0) {
+   gameState.gameOver = true
+   gameState.gameMessage === "Maximum turns exceeded! Game will end once this pot is cleared!"
+ }
 
-    if (playerOneMoney === playerTwoMoney) {
-      gameState.gameMessage = "Game over! It's a tie!"
-    }
-
-    else if(playerOneMoney>playerTwoMoney ) {
-      gameState.gameMessage = `Game over! Player 1 has won the game. Player 2 owes Player 1 $${playerOnePotentialWinnings}!`
-    }
-
-    else {
-      gameState.gameMessage = `Player 2 has won the game. Player 1 owes Player 2 $${playerOnePotentialWinnings}!`
-    }
-
-  }
+ else if (gameState.gameOver===true & gameState.currentPot===0) {
+  gameState.gameMessage = "Game over!"
+  setButtonStates("gameOver")
+ }
+    
 
   render()
 }
@@ -239,8 +247,8 @@ function everyoneAnte () {
   gameState.gameMessage = "New round! Antes are in! Place bet or pass."
 }
 
-function dealOuterCards() {
-  
+function dealOuterCards() { 
+
   if (gameState.roundResult === null) {
     //deck was shuffled at initialization. Not shuffling for first hand of the game.
     everyoneAnte()
@@ -267,7 +275,6 @@ function dealOuterCards() {
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
-    gameState.turnsRemaining -=1
     checkTurnsRemaining()
   }
 
@@ -288,8 +295,6 @@ function dealOuterCards() {
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
-    gameState.turnsRemaining -=1
-    checkTurnsRemaining()
   }
   setButtonStates("afterDeal")
   render();
@@ -398,7 +403,8 @@ function submitBet () {
       gameState.currentBet = 0
       switchPlayer()
       gameState.gameMessage = `The middle card is in between! ${previousPlayer} wins the bet and collects their winnings. It's now ${gameState.playerTurn}'s turn - select Deal Cards to continue.`
-      gameState.roundResult = "not cleared"  
+      gameState.roundResult = "not cleared"
+      gameState.turnsRemaining -=1  
       render()
     }
 
@@ -410,6 +416,7 @@ function submitBet () {
       switchPlayer()
       gameState.gameMessage= `The middle card is in between - ${previousPlayer} clears the pot! ${gameState.playerTurn}, it's your turn. Select Deal Cards to begin next round.`
       gameState.roundResult ="cleared"
+      gameState.turnsRemaining -=1
       render()
     }
 
@@ -419,11 +426,12 @@ function submitBet () {
     gameState.roundResult ="not cleared"
     switchPlayer()
     gameState.gameMessage= `The middle card is not between - ${previousPlayer} losses the bet! It's now ${gameState.playerTurn}'s turn. Select Deal Cards to continue.`
+    gameState.turnsRemaining -=1
     render()
   }
 
   setButtonStates("afterSubmit")
-  console.log(gameState.turnsRemaining)
+  checkTurnsRemaining()
 
   }
 
