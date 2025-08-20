@@ -28,6 +28,34 @@ const rankCards = {
   "J": 11, "Q": 12, "K": 13
 }
 
+const buttonStates = {
+  initial: {
+    dealBtn: true,
+    passBtn: false,
+    increaseBtn: false,
+    decreaseBtn: false,
+    submitBtn: false,
+    resetBtn: true
+  },
+  afterDeal: {
+    dealBtn: false,
+    passBtn: true,
+    increaseBtn: true,
+    decreaseBtn: true,
+    submitBtn: true,
+    resetBtn: true
+  },
+  afterSubmit: {
+    dealBtn: true,
+    passBtn: false,
+    increaseBtn: false,
+    decreaseBtn: false,
+    submitBtn: false,
+    resetBtn: true
+  }
+}
+
+
 /*---------- Variables (state) ---------*/
 
 let shuffledDeck = []
@@ -63,7 +91,7 @@ const resetBtn = document.getElementById("resetBtn")
 
 buttons.forEach((button) => {
     button.addEventListener("click",(event)=> {
-        let userClick = event.target.innerText
+        let userClick = event.target.id
         handleClick(userClick)
     })
 })
@@ -91,6 +119,8 @@ function init () {
     card2El.className = "card back-blue"
     card3El.className = "card back-blue"
 
+    setButtonStates("initial")
+
     render()
 }
 
@@ -109,30 +139,38 @@ function render() {
 }
 
 function handleClick (userClick) {
-  if (userClick==="Deal Cards") {
+  if (userClick==="dealBtn") {
     dealOuterCards()
   }
 
-  else if(userClick==="Pass") {
+  else if(userClick==="passBtn") {
     passBet()
   }
 
-  else if (userClick==="Increase Bet") {
+  else if (userClick==="increaseBtn") {
     increaseBet()
   }
 
-  else if (userClick==="Decrease Bet") {
+  else if (userClick==="decreaseBtn") {
     decreaseBet()
   }
 
-  else if (userClick==="Submit Bet") {
+  else if (userClick==="submitBtn") {
     submitBet()
   }
 
-  else if (userClick=== "Reset Game") {
+  else if (userClick=== "resetBtn") {
     init()
   }
 
+}
+
+function setButtonStates (phase) {
+  const config = buttonStates[phase]
+
+  for (let id in config) {
+    document.getElementById(id).disabled = !config[id]
+  }
 }
 
 function shuffleCards(cardDeck) {
@@ -174,7 +212,6 @@ function everyoneAnte () {
 }
 
 function dealOuterCards() {
-   
   if (gameState.roundResult === null) {
     //deck was shuffled at initialization. Not shuffling for first hand of the game.
     everyoneAnte()
