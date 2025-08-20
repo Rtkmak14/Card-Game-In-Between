@@ -31,6 +31,7 @@ const rankCards = {
 /*---------- Variables (state) ---------*/
 
 let shuffledDeck = []
+let userClick = ""
 
 /*----- Cached Element References  -----*/
 
@@ -54,7 +55,8 @@ const buttons = document.querySelectorAll(".buttons button")
 
 buttons.forEach((button) => {
     button.addEventListener("click",(event)=> {
-        let userClick = event.target.innerText 
+        let userClick = event.target.innerText
+        handleClick(userClick)
     })
 })
 
@@ -68,11 +70,16 @@ function init () {
     gameState.playerTurn = "Player 1"
     gameState.currentPot = 0
     gameState.currentBet = 0
+    gameState.gameMessage = "Welcome to In-Between! Select Deal Cards to begin playing!"
     gameState.roundResult = null
+    
+
+    cards.left = null
+    cards.right =  null
+    cards.middle =  null
 
     shuffleCards (cardDeck)
-
-    gameState.gameMessage = "Welcome to In-Between! Select Deal Cards to begin playing!"
+    
 
     render()
 }
@@ -90,6 +97,35 @@ function render() {
   gameMessageEl.textContent = gameState.gameMessage
 
 }
+
+function handleClick (userClick) {
+  if (userClick==="Deal Cards") {
+    dealOuterCards()
+  }
+
+  else if(userClick==="Pass") {
+    passBet()
+  }
+
+  else if (userClick==="Increase Bet") {
+    increaseBet()
+  }
+
+  else if (userClick==="Decrease Bet") {
+    decreaseBet()
+  }
+
+  else if (userClick==="Submit Bet") {
+    submitBet()
+  }
+
+  else if (userClick=== "Reset Game") {
+    init()
+  }
+
+}
+
+
 
 function shuffleCards(cardDeck) {
  shuffledDeck = cardDeck.sort(() => Math.random() - 0.5)
@@ -266,6 +302,10 @@ function submitBet () {
   const leftRank = rankCards[cards.left.slice(1)]
   const rightRank = rankCards[cards.right.slice(1)]
   const middleRank = rankCards[cards.middle.slice(1)]
+
+  console.log(leftRank)
+  console.log(middleRank)
+  console.log(rightRank)
   
   const low = Math.min(leftRank,rightRank)
   const high = Math.max(leftRank,rightRank)
@@ -309,11 +349,6 @@ function submitBet () {
   }
 
 init()
-dealOuterCards()
-increaseBet()
-submitBet()
-dealOuterCards()
-passBet()
 
 
 
