@@ -107,7 +107,7 @@ header {
 }
 
 /* Cards Section */
-.card {
+.card-pile{
   display: flex;
   justify-content: center;
   gap: 15px;

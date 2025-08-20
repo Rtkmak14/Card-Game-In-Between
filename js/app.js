@@ -34,21 +34,21 @@ let shuffledDeck = []
 
 /*----- Cached Element References  -----*/
 
-const money1El = document.getElementById("money1");
-const money2El = document.getElementById("money2");
+const money1El = document.getElementById("money1")
+const money2El = document.getElementById("money2")
 
-const gameMessageEl = document.getElementById("gameMessage");
+const gameMessageEl = document.getElementById("gameMessage")
 
-const card1El = document.getElementById("card1");
-const card2El = document.getElementById("card2");
-const card3El = document.getElementById("card3");
+const card1El = document.getElementById("card1")
+const card2El = document.getElementById("card2")
+const card3El = document.getElementById("card3")
 
-const remainingTurnsEl = document.getElementById("turnsRemaining");
-const currentTurnEl = document.getElementById("playerTurn");
-const potEl = document.getElementById("currentPot");
-const betEl = document.getElementById("currentBet");
+const remainingTurnsEl = document.getElementById("turnsRemaining")
+const currentTurnEl = document.getElementById("playerTurn")
+const potEl = document.getElementById("currentPot")
+const betEl = document.getElementById("currentBet")
 
-const buttons = document.querySelectorAll(".buttons button");
+const buttons = document.querySelectorAll(".buttons button")
 
 /*----------- Event Listeners ----------*/
 
@@ -68,6 +68,7 @@ function init () {
     gameState.playerTurn = "Player 1"
     gameState.currentPot = 0
     gameState.currentBet = 0
+    gameState.roundResult = null
 
     shuffleCards (cardDeck)
 
@@ -76,24 +77,22 @@ function init () {
     render()
 }
 
-// init()
-
 function render() {
 
-  money1El.textContent = `$${players.player1.money}`;
-  money2El.textContent = `$${players.player2.money}`;
+  money1El.textContent = `$${players.player1.money}`
+  money2El.textContent = `$${players.player2.money}`
 
-  remainingTurnsEl.textContent = `Turns Remaining: ${gameState.turnsRemaining}`;
-  currentTurnEl.textContent = `Current Turn: ${gameState.playerTurn}`;
-  potEl.textContent = `Pot: $${gameState.currentPot}`;
-  betEl.textContent = `Current Bet: $${gameState.currentBet}`;
+  remainingTurnsEl.textContent = `Turns Remaining: ${gameState.turnsRemaining}`
+  currentTurnEl.textContent = `Current Turn: ${gameState.playerTurn}`
+  potEl.textContent = `Pot: $${gameState.currentPot}`
+  betEl.textContent = `Current Bet: $${gameState.currentBet}`
 
-  gameMessageEl.textContent = gameState.gameMessage;
+  gameMessageEl.textContent = gameState.gameMessage
 
 }
 
 function shuffleCards(cardDeck) {
- shuffledDeck = cardDeck.sort(() => Math.random() - 0.5);
+ shuffledDeck = cardDeck.sort(() => Math.random() - 0.5)
 }
 
 function checkDeckLength1 () {
@@ -145,25 +144,23 @@ function dealOuterCards() {
     card2El.className = "card back"
   } 
   
-  else if (gameState.roundResult === "not win") {
+  else if (gameState.roundResult === "not cleared") {
     //check if there's enough cards, otherwise reshuffle.
     checkDeckLength2 ()
-    switchPlayer()
 
-    gameState.turnsRemaining -= 1
-    gameState.gameMessage = `It's ${gameFlow.playerTurn} turn. `
+    gameState.gameMessage = `It's ${gameState.playerTurn} turn. `
 
     const card1 = shuffledDeck.shift()
     const card3 = shuffledDeck.shift()
-    cards.left = card1;
-    cards.right = card3;
+    cards.left = card1
+    cards.right = card3
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
   }
 
 
-  else if (gameState.roundResult === "win") {
+  else if (gameState.roundResult === "cleared") {
     //check if there's enough cards, otherwise reshuffle.
     checkDeckLength2()
 
@@ -174,8 +171,8 @@ function dealOuterCards() {
 
     const card1 = shuffledDeck.shift()
     const card3 = shuffledDeck.shift()
-    cards.left = card1;
-    cards.right = card3;
+    cards.left = card1
+    cards.right = card3
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
@@ -184,17 +181,14 @@ function dealOuterCards() {
   render();
 }
 
-// init()
-// dealOuterCards()
-
 function passBet () {
   
   checkDeckLength2 ()
 
-  const card1 = shuffledDeck.shift();
-  const card3 = shuffledDeck.shift();
-  card1El.className = `card ${card1}`;
-  card3El.className = `card ${card3}`;
+  const card1 = shuffledDeck.shift()
+  const card3 = shuffledDeck.shift()
+  card1El.className = `card ${card1}`
+  card3El.className = `card ${card3}`
 
   const previousPlayer = gameState.playerTurn
 
@@ -207,9 +201,6 @@ function passBet () {
   render()
 }
 
-// init()
-// dealOuterCards()
-// passBet()
 
 function increaseBet () {
   const currentPlayer = getCurrentPlayer ()
@@ -230,11 +221,6 @@ function increaseBet () {
   }
 }
 
-// init()
-// dealOuterCards()
-// increaseBet()
-// increaseBet()
-// increaseBet()
 
 function decreaseBet () {
   const currentPlayer = getCurrentPlayer ()
@@ -249,33 +235,28 @@ function decreaseBet () {
 
   else {currentPlayer.money +=10
     gameState.currentBet -=10
-    gameState.gameMessage = `Bet has been reduced by $10. Pot is now $${gameState.currentPot}`
+    gameState.gameMessage = `Bet has been reduced by $10. Bet is now $${gameState.currentBet}`
     render()
   }
 }
 
-// init()
-// dealOuterCards()
-// decreaseBet()
-// increaseBet()
-// increaseBet()
-// decreaseBet()
-// passBet()
 
 function dealMiddleCard () {
   checkDeckLength1 ()
 
-  const card2 = shuffledDeck.shift();
+  const card2 = shuffledDeck.shift()
   cards.middle = card2
-  card2El.className = `card ${card2}`;
+  card2El.className = `card ${card2}`
 }
 
-// init()
-// dealOuterCards()
-// increaseBet()
-// dealMiddleCard()
 
 function submitBet () {
+  if (gameState.currentBet === 0) {
+    gameState.gameMessage = "You need to place a bet before submitting or pass!"
+    render()
+    return
+  }
+  
   const previousPlayer = gameState.playerTurn
 
   const currentPlayer = getCurrentPlayer()
@@ -289,21 +270,16 @@ function submitBet () {
   const low = Math.min(leftRank,rightRank)
   const high = Math.max(leftRank,rightRank)
 
-  
-  if (gameState.currentBet === 0) {
-    gameState.gameMessage = "You need to place a bet before submitting or pass!"
-    render()
-  }
-
-  else if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot not cleared
-      currentPlayer.money += gameState.currentPot
+  if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot not cleared
       currentPlayer.money += gameState.currentBet
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
-      gameState.gameMessage = `Middle card is in between! ${previousPlayer} wins the bet!.`
-      gameState.roundResult ="not cleared"  
       switchPlayer()
+      gameState.gameMessage = `Middle card is in between! ${previousPlayer} wins the bet! It's now ${gameState.playerTurn}'s turn.`
+      gameState.roundResult = "not cleared"
+      gameState.turnsRemaining -=1  
       render()
+      console.log("hand was won, pot not cleared")
     }
 
   else if ((gameState.currentBet===gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot cleared
@@ -311,33 +287,33 @@ function submitBet () {
       currentPlayer.money += gameState.currentBet
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
-      gameState.gameMessage= `Middle card is in between! ${previousPlayer} clears the pot!`
-      gameState.roundResult ="cleared"
       switchPlayer()
+      gameState.gameMessage= `Middle card is in between! ${previousPlayer} clears the pot! It's now ${gameState.playerTurn}'s turn!`
+      gameState.roundResult ="cleared"
+      gameState.turnsRemaining -=1
       render()
+      console.log("hand was won, pot cleared")
     }
 
   else {
     gameState.currentPot += gameState.currentBet
     gameState.currentBet = 0
-    gameState.gameMessage= `Middle card is not between! ${previousPlayer} losses bet!`
     gameState.roundResult ="not cleared"
     switchPlayer()
+    gameState.gameMessage= `Middle card is not between! ${previousPlayer} losses bet! It's now ${gameState.playerTurn}'s turn!`
+    gameState.turnsRemaining -=1
     render()
+    console.log("HAND WAS LOST")
   }
 
   }
-
 
 init()
 dealOuterCards()
-submitBet()
-increaseBet()
 increaseBet()
 submitBet()
-
-
-
+dealOuterCards()
+passBet()
 
 
 // function submitBet () {
