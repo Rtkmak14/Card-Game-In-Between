@@ -140,6 +140,35 @@ function render() {
 
 }
 
+function checkTurnsRemaining () {
+  if (gameState.turnsRemaining === 1) {
+    gameState.gameMessage = "Last Turn!"
+  }
+
+  else if (gameState.turnsRemaining === 0) {
+    const playerOneMoney = players.player1.money
+    const playerTwoMoney = players.player2.money
+
+    const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
+    const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
+
+    if (playerOneMoney === playerTwoMoney) {
+      gameState.gameMessage = "Game over! It's a tie!"
+    }
+
+    else if(playerOneMoney>playerTwoMoney ) {
+      gameState.gameMessage = `Player 1 has won the game. Player 2 owes Player 1 $${playerOnePotentialWinnings}!`
+    }
+
+    else {
+      gameState.gameMessage = `Player 2 has won the game. Player 1 owes Player 2 $${playerOnePotentialWinnings}!`
+    }
+
+  }
+
+  render()
+}
+
 function handleClick (userClick) {
   if (userClick==="dealBtn") {
     dealOuterCards()
@@ -213,6 +242,7 @@ function everyoneAnte () {
 }
 
 function dealOuterCards() {
+  
   if (gameState.roundResult === null) {
     //deck was shuffled at initialization. Not shuffling for first hand of the game.
     everyoneAnte()
@@ -239,6 +269,7 @@ function dealOuterCards() {
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
+    gameState.turnsRemaining -=1
   }
 
 
@@ -258,6 +289,7 @@ function dealOuterCards() {
     card1El.className = `card ${card1}`
     card3El.className = `card ${card3}`
     card2El.className = "card back"
+    gameState.turnsRemaining -=1
   }
   setButtonStates("afterDeal")
   render();
@@ -364,9 +396,8 @@ function submitBet () {
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
       switchPlayer()
-      gameState.gameMessage = `Middle card is in between! ${previousPlayer} wins the bet! It's now ${gameState.playerTurn}'s turn.`
-      gameState.roundResult = "not cleared"
-      gameState.turnsRemaining -=1  
+      gameState.gameMessage = `The middle card is in between! ${previousPlayer} wins the bet and collects their winnings. It's now ${gameState.playerTurn}'s turn - select Deal Cards to continue.`
+      gameState.roundResult = "not cleared"  
       render()
     }
 
@@ -376,9 +407,8 @@ function submitBet () {
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
       switchPlayer()
-      gameState.gameMessage= `Middle card is in between! ${previousPlayer} clears the pot! It's now ${gameState.playerTurn}'s turn!`
+      gameState.gameMessage= `The middle card is in between - ${previousPlayer} clears the pot! ${gameState.playerTurn}, it's your turn. Select Deal Cards to begin next round.`
       gameState.roundResult ="cleared"
-      gameState.turnsRemaining -=1
       render()
     }
 
@@ -387,8 +417,7 @@ function submitBet () {
     gameState.currentBet = 0
     gameState.roundResult ="not cleared"
     switchPlayer()
-    gameState.gameMessage= `Middle card is not between! ${previousPlayer} losses bet! It's now ${gameState.playerTurn}'s turn!`
-    gameState.turnsRemaining -=1
+    gameState.gameMessage= `The middle card is not between - ${previousPlayer} losses the bet! It's now ${gameState.playerTurn}'s turn. Select Deal Cards to continue.`
     render()
   }
 
