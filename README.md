@@ -1,7 +1,7 @@
 <img src="https://cdn.pixabay.com/photo/2015/06/14/19/14/playing-cards-809356_1280.jpg" alt="Picture of playing cards" width="100%" height= "300" style ="border: 2px solid #daa520; border-radius: 12px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)"
 />
 
-[Insert link to live game or GitHub Pages deployment]
+[Game Link](https://rtkmak14.github.io/Card-Game-In-Between/)
 
 # IN-BETWEEN CARD GAME
 A two-player betting game built with vanilla JavaScript, HTML, and CSS. Players ante into a shared pot, then bet on whether a third card will fall between two outer cards. Strategic betting, pot-clearing wins, and turn-based logic make for a fast-paced, casino-inspired experience.
@@ -32,7 +32,7 @@ CSS: Styling, card visuals, accessible color contrast
 * AI Usage:
     * This project benefited from Microsoft Copilot’s support in code pseudocode generation, architectural planning, syntax debugging, and initial README composition.
 
-# Planned Enhancements
+# PLANNED ENHANCEMENTS
 * Restructure the display to rely less on the game message.
 * Add visual feedback for bets won or lost.
 * Introduce sound effects in the browser. 
