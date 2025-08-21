@@ -111,7 +111,7 @@ function init () {
     players.player1.money = 100
     players.player2.money = 100
 
-    gameState.turnsRemaining = 3
+    gameState.turnsRemaining = 20
     gameState.playerTurn = "Player 1"
     gameState.currentPot = 0
     gameState.currentBet = 0
@@ -155,7 +155,7 @@ function checkTurnsRemaining () {
   const playerTwoPotentialWinnings = Math.abs(100 - playerOneMoney)
 
   if (gameState.turnsRemaining===1) {
-    gameState.gameMessage = gameState.gameMessage + " Last turn also!"
+    gameState.gameMessage = gameState.gameMessage + " Last turn or until pot is cleared!"
     gameState.gameOver = true
   }
 
