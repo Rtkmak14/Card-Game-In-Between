@@ -161,10 +161,10 @@ function checkTurnsRemaining () {
 
   else if (gameState.gameOver === true && gameState.currentPot === 0) {//no turns remaining and pot cleared
     if (playerOneMoney>playerTwoMoney) {
-      gameState.gameMessage = ` Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
+      gameState.gameMessage = `  A winnner! Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
     }
 
-    else {gameState.gameMessage = ` Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
+    else {gameState.gameMessage = ` A winnder! Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
     
     setButtonStates("gameOver")
     gameState.turnsRemaining = 0
