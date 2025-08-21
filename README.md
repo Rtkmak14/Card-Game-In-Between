@@ -30,7 +30,7 @@ CSS: Styling, card visuals, accessible color contrast
 # ATTRIBUTION
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 * AI Usage:
-    * This project benefited from Microsoft Copilot’s support in code pseudocode generation, architectural planning, syntax debugging, and initial README composition.
+    * This project benefited from Microsoft Copilot’s support in pseudocode generation, architectural planning, syntax debugging, and initial README composition.
 
 # PLANNED ENHANCEMENTS
 * Restructure the display to rely less on the game message.

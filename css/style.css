@@ -33,7 +33,7 @@ img {
 .players {
   display: flex;
   justify-content: space-around;
-  gap: 20px;
+  gap: 0px;
   margin-bottom: 25px;
 }
 
@@ -122,4 +122,10 @@ img {
 .buttons button:hover {
   background-color: #b22222;
   transform: scale(1.05);
+}
+
+a {
+  color: #fffff0; 
+  font-weight: bold;
+  font-family: 'Segoe UI', sans-serif;
 }
