@@ -151,17 +151,23 @@ function render() {
 function checkTurnsRemaining () {
   const playerOneMoney = players.player1.money
   const playerTwoMoney = players.player2.money
-  const playerOnePotentialWinnings = Math.abs(playerOneMoney - playerTwoMoney)
-  const playerTwoPotentialWinnings = Math.abs(playerTwoMoney - playerOneMoney)
+  const playerOnePotentialWinnings = Math.abs(100 - playerTwoMoney)
+  const playerTwoPotentialWinnings = Math.abs(100 - playerOneMoney)
 
   if (gameState.turnsRemaining===1) {
     gameState.gameMessage = gameState.gameMessage + " Last turn also!"
     gameState.gameOver = true
   }
 
-  else if (gameState.gameOver === true && gameState.currentPot === 0) {
-    gameState.gameMessage = gameState.gameMessage + " Game is also over!"
+  else if (gameState.gameOver === true && gameState.currentPot === 0) {//no turns remaining and pot cleared
+    if (playerOneMoney>playerTwoMoney) {
+      gameState.gameMessage = ` Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
+    }
+
+    else {gameState.gameMessage = ` Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
+    
     setButtonStates("gameOver")
+    gameState.turnsRemaining = 0
   }
 
   else if(gameState.gameOver === true && gameState.currentPot != 0) {
