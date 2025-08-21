@@ -83,19 +83,6 @@ img {
   margin-bottom: 25px;
 }
 
-.card {
-  background-color: #fff;
-  border: 2px solid #999;
-  padding: 25px;
-  width: 90px;
-  text-align: center;
-  border-radius: 6px;
-  font-weight: bold;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-  cursor: pointer;
-  transition: transform 0.2s ease;
-}
-
 .card:hover {
   transform: scale(1.05);
 }
