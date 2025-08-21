@@ -159,7 +159,7 @@ function checkTurnsRemaining () {
     gameState.gameOver = true
   }
 
-  else if (gameState.gameOver === true && gameState.currentPot === 0) {//no turns remaining and pot cleared
+  else if (gameState.gameOver === true && gameState.currentPot === 0) {
     if (playerOneMoney>playerTwoMoney) {
       gameState.gameMessage = `  A winnner! Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
     }
@@ -254,7 +254,7 @@ function everyoneAnte () {
 function dealOuterCards() { 
 
   if (gameState.roundResult === null) {
-    //deck was shuffled at initialization. Not shuffling for first hand of the game.
+    
     everyoneAnte()
 
     const card1 = shuffledDeck.shift()
@@ -267,7 +267,7 @@ function dealOuterCards() {
   } 
   
   else if (gameState.roundResult === "not cleared") {
-    //check if there's enough cards, otherwise reshuffle.
+    
     checkDeckLength2 ()
 
     gameState.gameMessage = `It's ${gameState.playerTurn}'s turn. `
@@ -284,7 +284,7 @@ function dealOuterCards() {
 
 
   else if (gameState.roundResult === "cleared") {
-    //check if there's enough cards, otherwise reshuffle.
+    
     checkDeckLength2()
 
     players.player1.money -= 10
@@ -402,9 +402,9 @@ function submitBet () {
   const low = Math.min(leftRank,rightRank)
   const high = Math.max(leftRank,rightRank)
 
-  if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot not cleared
-      currentPlayer.money += gameState.currentBet //return bet
-      currentPlayer.money += gameState.currentBet //take portion of pot won
+  if ((gameState.currentBet < gameState.currentPot) && (middleRank>low && middleRank<high)) {
+      currentPlayer.money += gameState.currentBet 
+      currentPlayer.money += gameState.currentBet 
       gameState.currentPot -= gameState.currentBet
       gameState.currentBet = 0
       switchPlayer()
@@ -413,7 +413,7 @@ function submitBet () {
       gameState.turnsRemaining -=1 
     }
 
-  else if ((gameState.currentBet===gameState.currentPot) && (middleRank>low && middleRank<high)) {//winning state, pot cleared
+  else if ((gameState.currentBet===gameState.currentPot) && (middleRank>low && middleRank<high)) {
       currentPlayer.money += gameState.currentPot
       currentPlayer.money += gameState.currentBet
       gameState.currentPot -= gameState.currentBet
