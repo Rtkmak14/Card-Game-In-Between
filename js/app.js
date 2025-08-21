@@ -155,7 +155,7 @@ function checkTurnsRemaining () {
   const playerTwoPotentialWinnings = Math.abs(100 - playerOneMoney)
 
   if (gameState.turnsRemaining===1) {
-    gameState.gameMessage = gameState.gameMessage + " Last turn or until pot is cleared!"
+    gameState.gameMessage = gameState.gameMessage + " Last turn or until remaining pot is cleared!"
     gameState.gameOver = true
   }
 
@@ -164,7 +164,7 @@ function checkTurnsRemaining () {
       gameState.gameMessage = `  A winnner! Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
     }
 
-    else {gameState.gameMessage = ` A winnder! Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
+    else {gameState.gameMessage = ` A winner! Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
     
     setButtonStates("gameOver")
     gameState.turnsRemaining = 0
