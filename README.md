@@ -25,7 +25,7 @@ A two-player betting game built with vanilla JavaScript, HTML, and CSS. Players 
 # TECHNOLOGIES USED
 JavaScript: Game logic, state management, DOM manipulation
 HTML: Semantic structure and layout
-CSS: Styling, card visuals, accessible color contrast
+CSS: Styling, card visuals, accessible color contrast.
 
 # ATTRIBUTION
 * [MDN Web Docs](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
