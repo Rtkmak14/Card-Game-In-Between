@@ -164,7 +164,9 @@ function checkTurnsRemaining () {
       gameState.gameMessage = `  A winnner! Game is over! Player 2 owes Player 1 $${playerOnePotentialWinnings} `
     }
 
-    else {gameState.gameMessage = ` A winner! Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
+    else if (playerOneMoney<playerTwoMoney) {gameState.gameMessage = ` A winner! Game is over! Player 1 owes Player 2 $${playerTwoPotentialWinnings} `}
+
+    else {gameState.gameMessage = "Game over! It's a tie!"}
     
     setButtonStates("gameOver")
     gameState.turnsRemaining = 0
@@ -439,6 +441,7 @@ function submitBet () {
   }
 
 init()
+
 
 
 

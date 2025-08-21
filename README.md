@@ -20,7 +20,8 @@ A two-player betting game built with vanilla JavaScript, HTML, and CSS. Players 
     * Game ends after 20 turns or when the pot is cleared.
 * Other information:
     * Each player initially starts with $100 but you're allowed to go negative (i.e. buy in for more money).
-    * If the deck runs out during a hand, all cards — including those currently in play — are reshuffled into a new full deck. 
+    * If the deck runs out during a hand, all cards — including those currently in play — are reshuffled into a new full deck.
+    * Aces are always low.
 
 # TECHNOLOGIES USED
 JavaScript: Game logic, state management, DOM manipulation
